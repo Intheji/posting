@@ -1,8 +1,6 @@
 package com.posting.comment.service;
 
-import com.posting.comment.dto.CreateCommentRequest;
-import com.posting.comment.dto.CreateCommentResponse;
-import com.posting.comment.dto.GetCommentResponse;
+import com.posting.comment.dto.*;
 import com.posting.comment.entity.Comment;
 import com.posting.comment.repository.CommentRepository;
 import com.posting.posting.entity.Posting;
@@ -48,5 +46,32 @@ public class CommentService {
                         comment.getContent()
                 ))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public GetCommentResponse getOne(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalStateException("없는 댓글입니다.")
+        );
+        return new GetCommentResponse(comment.getId(), comment.getContent());
+    }
+
+    @Transactional
+    public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalStateException("없는 댓글입니다.")
+        );
+        comment.update(request.getContent());
+        return new UpdateCommentResponse(comment.getId());
+    }
+
+    @Transactional
+    public void delete(Long commentId) {
+        boolean existence = commentRepository.existsById(commentId);
+
+        if (!existence) {
+            throw new IllegalStateException("없는 댓글입니다");
+        }
+        commentRepository.deleteById(commentId);
     }
 }
