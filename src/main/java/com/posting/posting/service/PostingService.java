@@ -29,11 +29,11 @@ public class PostingService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetPostingResponse> getAll() {
+    public List<GetPostingsResponse> getAll() {
         List<Posting> postings = postingRepository.findAll();
-        List<GetPostingResponse> dtos = new ArrayList<>();
+        List<GetPostingsResponse> dtos = new ArrayList<>();
         for (Posting posting : postings) {
-            GetPostingResponse dto = new GetPostingResponse(
+            GetPostingsResponse dto = new GetPostingsResponse(
                     posting.getId(),
                     posting.getTitle()
             );
@@ -49,7 +49,8 @@ public class PostingService {
         );
         return new GetPostingResponse(
                 posting.getId(),
-                posting.getTitle()
+                posting.getTitle(),
+                posting.getContent()
         );
     }
 

@@ -23,7 +23,7 @@ public class PostingController {
     }
 
     @GetMapping("/postings")
-    public ResponseEntity<List<GetPostingResponse>> getPostings() {
+    public ResponseEntity<List<GetPostingsResponse>> getPostings() {
         return ResponseEntity.status(HttpStatus.OK).body(postingService.getAll());
     }
 
