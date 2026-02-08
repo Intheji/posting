@@ -1,8 +1,6 @@
 package com.posting.posting.service;
 
-import com.posting.posting.dto.CreatePostingRequest;
-import com.posting.posting.dto.CreatePostingResponse;
-import com.posting.posting.dto.GetPostingResponse;
+import com.posting.posting.dto.*;
 import com.posting.posting.entity.Posting;
 import com.posting.posting.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +40,34 @@ public class PostingService {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    @Transactional(readOnly = true)
+    public GetPostingResponse getOne(Long postingId) {
+        Posting posting = postingRepository.findById(postingId).orElseThrow(
+                () -> new IllegalStateException("없는 게시글입니다.")
+        );
+        return new GetPostingResponse(
+                posting.getId(),
+                posting.getTitle()
+        );
+    }
+
+    @Transactional
+    public @Nullable UpdatePostingResponse update(Long postingId, UpdatePostingRequest request) {
+        Posting posting = postingRepository.findById(postingId).orElseThrow(
+                () -> new IllegalStateException("없는 게시글입니다.")
+        );
+        posting.update(request.getTitle(), request.getContent());
+        return new UpdatePostingResponse(posting.getId());
+    }
+
+    @Transactional
+    public void delete(Long postingId) {
+        boolean existence = postingRepository.existsById((postingId));
+        if (!existence) {
+            throw new IllegalStateException("없는 게시글입니다.");
+        }
+        postingRepository.deleteById(postingId);
     }
 }

@@ -2,6 +2,8 @@ package com.posting.posting.dto;
 
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class GetPostingResponse {
 
