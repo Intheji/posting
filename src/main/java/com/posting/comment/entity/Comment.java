@@ -22,7 +22,8 @@ public class Comment {
     @JoinColumn(name = "posting_id", nullable = false)      // nullable은 DB에서 null의 허용 여부
     private Posting posting;
 
-    public Comment(String content) {
+    public Comment(String content, Posting posting) {
         this.content = content;
+        this.posting = posting;
     }
 }
